@@ -1,0 +1,8 @@
+prefix=/home/youd/catkin_ws/src/beginner_tutorials/build/devel
+
+Name: beginner_tutorials
+Description: Description of beginner_tutorials
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/youd/catkin_ws/src/beginner_tutorials/build/devel/lib 
+Requires: 
