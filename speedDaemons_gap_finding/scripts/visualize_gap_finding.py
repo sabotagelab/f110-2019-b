@@ -17,6 +17,7 @@ def callback(data):
     marker.pose.position.y = data.y
     marker.pose.position.z = data.z # or set this to 0
     marker.type = marker.SPHERE
+    marker.lifetime=rospy.Duration(0.1)
 
     marker.scale.x = 0.1 # If marker is too small in Rviz can make it bigger here
     marker.scale.y = 0.1

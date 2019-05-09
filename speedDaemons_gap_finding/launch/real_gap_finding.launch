@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find racecar)/launch/teleop.launch"/>
+
+  <node pkg="speedDaemons_gap_finding" name="find_gap_node" type="find_gap.py" output="screen"/>
+  <node pkg="speedDaemons_gap_finding" name="dead_mans_switch" type="dead_mans_switch.py" output="screen"/>
+  <node pkg="speedDaemons_gap_finding" name="visualize_gap_finding_node" type="visualize_gap_finding.py"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find speedDaemons_gap_finding)/rviz/race_car_gap_finding.rviz"/>
+
+
+</launch>
