@@ -9,6 +9,7 @@ import os
 
 class ReadInstruction:
     def __init__(self):
+        print("READING INSTRUCTIONS")
         rospy.init_node('instruction_reader_node', anonymous=True)
         rospy.Subscriber("instruction_feedback", String, self.instruction_recieved)
         self.pub = rospy.Publisher('drive_instruction', turn_instruction, queue_size=10)
@@ -16,8 +17,8 @@ class ReadInstruction:
         self.instructions = []
         self.INSTRUCTIONS_COMPLETE = False
         self.ROOT = '/home/nvidia/f1racing/f110_ws/src/labs'
-        self.FILE_LOCAATION = 'wall_following/explicit_instructions'
-        self.file_path = os.path.join(self.ROOT,self.FILE_LOCAATION,'instructions.csv')
+        self.FILE_LOCATION = 'wall_following/explicit_instructions'
+        self.file_path = os.path.join(self.ROOT,self.FILE_LOCATION,'instructions.csv')
         self.readToList()
         print(self.instructions)
 

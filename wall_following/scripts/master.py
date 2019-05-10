@@ -23,7 +23,7 @@ class Master:
         self.wall_follow_angle = 0
         self.wall_follow_vel = 0
         self.time_up = True
-        self.DELTA_ANGLE = math.radians(45)
+        self.DELTA_ANGLE = math.radians(75)
         self.STATUS_TURN_COMPLETE = 'turnCompleted'
         self.DEFAULT_VEL = 2
 
