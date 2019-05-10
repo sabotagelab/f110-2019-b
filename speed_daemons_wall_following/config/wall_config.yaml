@@ -1,0 +1,23 @@
+wall_follow_side : left
+
+wall_Kp: 70.0
+wall_Kd: 30.0
+wall_Ki: 0.0
+integral_sum_limit: 10.0
+max_steering_angle: 30.0
+default_velocity: 1.5
+max_velocity: 3.0
+default_turning_velocity: 0.5
+
+lidar_min_angle: -45.0
+lidar_max_angle: 225.0
+pid_lookahead_distance: 0.25
+max_lookahead_distance: 0.75
+adaptive_lookahead: False
+wall_scan_angle: 60
+target_distance_left: 1.0
+target_distance_right: 1.0
+debug_print_mode: False
+
+
+
