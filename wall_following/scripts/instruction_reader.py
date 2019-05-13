@@ -16,9 +16,10 @@ class ReadInstruction:
 
         self.instructions = []
         self.INSTRUCTIONS_COMPLETE = False
-        self.ROOT = '/home/nvidia/f1racing/f110_ws/src/labs'
+        self.ROOT = '/home/aidan/github/f110_ws/src/f110-2019-b'
         self.FILE_LOCATION = 'wall_following/explicit_instructions'
         self.file_path = os.path.join(self.ROOT,self.FILE_LOCATION,'instructions.csv')
+        print(self.file_path)
         self.readToList()
         print(self.instructions)
 
