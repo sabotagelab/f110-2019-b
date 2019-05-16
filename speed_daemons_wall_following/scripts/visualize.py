@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import rospy
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import Marker, MarkerArray
 from geometry_msgs.msg import Vector3, Point
 from std_msgs.msg import Float32, String, ColorRGBA, Header
 import tf.transformations as transform
 from race.msg import drive_param
 from speed_daemons_wall_following.msg import turn_instruction
+from speedDaemons_gap_finding.msg import Gap, gaps
 import math
 
 
@@ -19,11 +20,15 @@ class Visualizer:
         self.publisher_instruction = rospy.Publisher('/visualization_instruction', Marker, queue_size=1)
         self.publisher_velocity = rospy.Publisher('/visualization_velocity', Marker, queue_size=1)
         self.publisher_actual_velocity = rospy.Publisher('/visualization_actual_velocity', Marker, queue_size=1)
+        self.publisher_gap_centers = rospy.Publisher('/visualization_gap_centers', MarkerArray, queue_size=1)
+
         rospy.Subscriber('turning_mode', String, self.turning_callback)
         rospy.Subscriber("instruction_feedback", String, self.turn_status_callback)
         rospy.Subscriber("drive_vel", Float32, self.velocity_callback)
         rospy.Subscriber('drive_parameters', drive_param, self.actual_speed_callback)
         rospy.Subscriber('drive_instruction', turn_instruction, self.instruction_callback)
+        rospy.Subscriber('lidar_gaps', gaps, self.lidar_gaps_callback)
+
         # default wall following operation mode is right
         self.wallAlignment = rospy.get_param('wall_follow_side', 'right')
         self.turnStatus = "turnCompleted"
@@ -31,6 +36,12 @@ class Visualizer:
         self.velocity = "Speed: " + str(vel) + " m/s"
         self.actual_velocity = str(0.0)
         self.current_instruction = "Instruction: " + rospy.get_param('wall_follow_side', ' ')
+        self.gap_centers = []
+    
+    def lidar_gaps_callback(self, gaps):
+        self.gap_centers = []
+        for i in gaps.gapdata:
+            self.gap_centers.append(i.center)
 
     def instruction_callback(self, msg):
         self.current_instruction = "Instruction: " + msg.command
@@ -47,7 +58,9 @@ class Visualizer:
         self.velocity = "Speed: " + str(data.data) + " m/s"
 
     def actual_speed_callback(self, data):
-        self.actual_velocity = "True speed:" + str(data.velocity) + " m/s"
+        self.actual_velocity = "True speed: " +str(round(data.velocity, 1)) + " m/s"
+
+
 
     def publish_text(self, text, x, y, publisher):
         marker = Marker()
@@ -85,6 +98,30 @@ class Visualizer:
         dir_marker.color = ColorRGBA(0.0, 1.0, 0.0, 0.8)
         publisher.publish(dir_marker)
 
+    def publish_marker(self,gap_centers,publisher):
+        markerA = MarkerArray()
+
+        for i in gap_centers:
+            marker=Marker()
+            
+            # Specify the frame in which to interpret the x,y,z coordinates. It is the laser frame.
+            marker.header.frame_id = "/laser"
+            marker.pose.position.x = i.x
+            marker.pose.position.y = i.y
+            marker.pose.position.z = 0
+            marker.type = marker.SPHERE
+            marker.lifetime=rospy.Duration(0.1)
+
+            marker.scale.x = 0.1 # If marker is too small in Rviz can make it bigger here
+            marker.scale.y = 0.1
+            marker.scale.z = 0.1
+            marker.color.a = 1.0
+            marker.color.r = 1.0
+            marker.color.g = 1.0
+            marker.color.b = 0.0
+            markerA.markers.append(marker)
+
+        publisher.publish(markerA)
 
 if __name__ == '__main__':
     visualizer = Visualizer()
@@ -95,4 +132,5 @@ if __name__ == '__main__':
         visualizer.publish_arrow(visualizer.wallAlignment, visualizer.publisher_turns)
         visualizer.publish_text(visualizer.velocity, 0, -2, visualizer.publisher_velocity)
         visualizer.publish_text(visualizer.actual_velocity, -1, -2, visualizer.publisher_actual_velocity)
+        visualizer.publish_marker(visualizer.gap_centers,visualizer.publisher_gap_centers)
         rate.sleep()
