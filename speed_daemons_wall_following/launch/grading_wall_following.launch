@@ -5,6 +5,7 @@
   </include>
   <arg name="wall_config" default="$(find speed_daemons_wall_following)/config/wall_config.yaml" />
   <rosparam file="$(arg wall_config)" command="load"/>
+  
 
   <node pkg="speed_daemons_wall_following" name="pid_error_node" type="pid_error.py" output="screen"/> 
   <node pkg="speed_daemons_wall_following" name="control_node" type="control.py" output="screen"/>
