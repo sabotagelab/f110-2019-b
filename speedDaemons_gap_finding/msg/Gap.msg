@@ -3,7 +3,7 @@ float32 startAngle
 float32 endRange
 float32 endAngle
 float32 gapWidth
-Vector3 center
+geometry_msgs/Vector3 center
 
 #startRange- distance at the point of begining of gap
 #startAngle - angle at the point of beginning of gap
