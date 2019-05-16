@@ -131,6 +131,12 @@ if __name__ == '__main__':
                     single_gap.endRange = data[2]
                     single_gap.endAngle = data[3]
                     single_gap.gapWidth = gapfinding.gap_widths[index]
+                    p1 = gapfinding.toXYZ(single_gap.startRange, single_gap.startAngle)
+                    p2 = gapfinding.toXYZ( single_gap.endRange , single_gap.endAngle)
+                    p3 = Point((p1.x + p2.x) / 2.0, (p1.y + p2.y) / 2.0, 0)
+                    gap_center = Vector3()
+                    gap_center.x, gap_center.y, gap_center.z = p3.x, p3.y, p3.z
+                    single_gap.center= gap_center
                     scan_gaps.gapdata.append(single_gap)
             gapfinding.gaps_pub.publish(scan_gaps)
             gapfinding.publish_flag = False

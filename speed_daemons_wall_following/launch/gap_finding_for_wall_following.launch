@@ -2,7 +2,7 @@
 <launch>
   <arg name="gap_config" default="$(find speedDaemons_gap_finding)/config/gap_finding_config.yaml" />
   <rosparam file="$(arg gap_config)" command="load"/>
-  <node pkg="gap_finding" name="find_gap_node" type="find_gap.py" output="screen"/>
+  <node pkg="speedDaemons_gap_finding" name="find_gap_node" type="find_gap.py" output="screen"/>
   <!--<node pkg="speedDaemons_gap_finding" name="visualize_gap_finding_node" type="visualize_gap_finding.py" output="screen"/>-->
 
 </launch>
