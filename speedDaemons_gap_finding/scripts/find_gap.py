@@ -18,14 +18,13 @@ class GapFinding:
         self.gap_center_pub = rospy.Publisher("gap_center", Vector3, queue_size=1)
         self.gaps_pub = rospy.Publisher("lidar_gaps", gaps, queue_size=1)
         self.drive_pub = rospy.Publisher('drive_parameters', drive_param, queue_size=1)
-        self.angle_max = math.radians(rospy.get_param('~angle_max', 90.0))
-        self.angle_min = math.radians(rospy.get_param('~angle_min', -90.0))
+        self.angle_max = math.radians(rospy.get_param('angle_max', 90.0))
+        self.angle_min = math.radians(rospy.get_param('angle_min', -90.0))
         self.angle_initialize_flag = False
-        self.lookahead_range = rospy.get_param('~lookahead_range', 3.0)
-        self.cluster_density = 4.0
-        self.skip_points = 3
-        self.distance_tolerance = 0.1
-        self.MIN_GAP_WIDTH = 1.0
+        self.lookahead_range = rospy.get_param('lookahead_range', 3.0)
+        self.cluster_density = rospy.get_param('cluster_density', 4.0)
+        self.distance_tolerance = rospy.get_param('distance_tolerance', 0.1)
+        self.MIN_GAP_WIDTH = rospy.get_param('min_gap_width', 1.5)
         self.cluster = []
         self.gap_widths = []
         self.publish_flag = False
@@ -118,7 +117,7 @@ class GapFinding:
 
 if __name__ == '__main__':
     gapfinding = GapFinding()
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         if gapfinding.publish_flag:
             scan_gaps = gaps()
