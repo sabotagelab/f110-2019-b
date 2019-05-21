@@ -23,7 +23,6 @@ class Visualizer:
         self.turnStatus = "Turning Now"
 
     def publish_text(self,text,x,y,publisher):
-        # print("publishing data")
         marker = Marker()
 
         # Specify the frame in which to interpret the x,y,z coordinates. It is the laser frame.
