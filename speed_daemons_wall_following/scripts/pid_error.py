@@ -4,10 +4,10 @@ import rospy
 import math
 import numpy as np
 import yaml
-import sys
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Float64, String
-from wall_following.msg import wall_parameters
+from speed_daemons_wall_following.msg import wall_parameters
+from race.msg import drive_param
 import pdb
 
 
@@ -16,6 +16,7 @@ class PIDerror:
         rospy.init_node('pid_error_node', anonymous=True)
         rospy.Subscriber("scan", LaserScan, self.scan_callback)
         rospy.Subscriber("turning_mode", String, self.turning_callback)
+        rospy.Subscriber('drive_parameters', drive_param, self.actual_speed_callback)
         self.pid_pub = rospy.Publisher('pid_error', Float64, queue_size=10)
         self.wall_data_pub = rospy.Publisher('wall_parameters', wall_parameters, queue_size=1)
         self.MIN_ANGLE = rospy.get_param('lidar_min_angle', 0.0)
@@ -30,16 +31,28 @@ class PIDerror:
         self.DEBUG_MODE = rospy.get_param('debug_print_mode', False)
         self.current_dist = 0.0
         self.NORMAL_VEL = rospy.get_param('default_velocity', 2.0)
-        max_lookahead_dist = rospy.get_param('max_lookahead_distance', 0.75)
-        adaptive_lookahead_flag = rospy.get_param('adaptive_lookahead', False)
-        if adaptive_lookahead_flag:
-            self.LOOKAHEAD_DIST= self.NORMAL_VEL * 0.25
-            if self.LOOKAHEAD_DIST > max_lookahead_dist:
-                self.LOOKAHEAD_DIST = max_lookahead_dist
+        self.max_lookahead_dist = rospy.get_param('max_lookahead_distance', 0.75)
+        self.min_lookahead_dist = rospy.get_param('min_lookahead_distance', 0.35)
+        self.adaptive_lookahead_flag = rospy.get_param('adaptive_lookahead', False)
+        self.LOOKAHEAD_DIST = rospy.get_param('pid_lookahead_distance', 0.35)
+        self.adapt_lookahead_distance()
+        print "operation-mode=",self.OPERATION_MODE
+
+    def adapt_lookahead_distance(self):
+        if self.adaptive_lookahead_flag:
+            self.LOOKAHEAD_DIST= self.NORMAL_VEL * 0.3
+            if self.LOOKAHEAD_DIST > self.max_lookahead_dist:
+                self.LOOKAHEAD_DIST = self.max_lookahead_dist
+            elif self.LOOKAHEAD_DIST <= self.min_lookahead_dist:
+                self.LOOKAHEAD_DIST = self.min_lookahead_dist
+            # print(self.LOOKAHEAD_DIST)
         else:
             self.LOOKAHEAD_DIST = rospy.get_param('pid_lookahead_distance', 0.35)
 
-        print("operation-mode=",self.OPERATION_MODE)
+
+    def actual_speed_callback(self,data):
+        self.NORMAL_VEL =data.velocity
+        self.adapt_lookahead_distance()
 
 
     def getRange(self,data, angle):
@@ -76,8 +89,8 @@ class PIDerror:
         return error
 
     def followCenter(self,data):
-        error_dist_left = self.followLeft(data, 1.0)
-        error_dist_right = self.followRight(data, 1.0)
+        error_dist_left = self.followLeft(data, 0.5)
+        error_dist_right = self.followRight(data, 0.5)
         error_dist_center = error_dist_left + error_dist_right
         return error_dist_center
 
@@ -93,15 +106,16 @@ class PIDerror:
         msg = Float64()
         msg.data = error
         self.pid_pub.publish(msg)
+
         wall_data= wall_parameters()
         wall_data.wall_distance= self.current_dist
         wall_data.wall_angle = self.alpha
+        wall_data.wall_follow_side = self.OPERATION_MODE
         self.wall_data_pub.publish(wall_data)
 
 
     def turning_callback(self,data):
         self.OPERATION_MODE = data.data
-        print(self.OPERATION_MODE)
 
 
 if __name__ == '__main__':

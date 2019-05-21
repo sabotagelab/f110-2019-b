@@ -1,0 +1,6 @@
+angle_max: 90.0
+angle_min: -90.0
+lookahead_range: 3.0
+cluster_density: 4.0
+distance_tolerance: 0.1
+min_gap_width: 1.0
