@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit.py" output="screen">
+      <param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/levine-waypoints.csv" />
+    </node>
+
+</launch>

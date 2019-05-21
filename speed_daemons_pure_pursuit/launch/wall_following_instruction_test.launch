@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="wall_config" default="$(find speed_daemons_wall_following)/config/wall_config.yaml" />
+  <rosparam file="$(arg wall_config)" command="load"/>
+
+  <node pkg="speed_daemons_wall_following" name="instruction_reader_node" type="instruction_reader.py" output="screen">
+      <param name="instruction_filepath" value="$(find speed_daemons_wall_following)/explicit_instructions/instructions.csv" />
+  </node>
+</launch>
