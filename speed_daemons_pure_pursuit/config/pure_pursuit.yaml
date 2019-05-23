@@ -1,43 +1,11 @@
-wall_follow_side : left
-
-pid_frequency: 10.0
-ramping_enable: True
-acceleration: 0.8      #m/s^2 (acceleration and deacceleration values)
-integral_sum_limit: 10.0
-max_steering_angle: 30.0
-default_velocity: 1.5
-max_velocity: 1.5
-default_turning_velocity: 0.5
-
-#Uncomment the section below for simulator and comment the real world section that follows it
-
-wall_Kp: 100.0
-wall_Kd: 50.0
-wall_Ki: 0.0
-lidar_min_angle: -45.0
-lidar_max_angle: 225.0
-pid_lookahead_distance: 0.3
-max_lookahead_distance: 0.75   #max adaptive lookahead distance
-min_lookahead_distance: 0.3
-adaptive_lookahead: True
-wall_scan_angle: 60
-target_distance_left: 0.75
-target_distance_right: 0.75
-debug_print_mode: False
-
-#Uncomment the section below for real world scenario and comment above section
-
-#wall_Kp: 50.0
-#wall_Kd: 30.0
-#wall_Ki: 0.0
-#lidar_min_angle: 0.0
-#lidar_max_angle: 180.0
-#pid_lookahead_distance: 0.3
-#max_lookahead_distance: 0.75   #max adaptive lookahead distance
-#min_lookahead_distance: 0.3
-#adaptive_lookahead: True
-#wall_scan_angle: 60
-#target_distance_left: 1.0
-#target_distance_right: 1.0
-#debug_print_mode: False
-
+loop_enable: True
+speed_control: True
+initial_lookahead_distance : 1.5
+initial_velocity : 2.0
+straight_lookahead_dist : 3.0
+turning_lookahead_dist : 0.5
+straight_vel : 2.0
+turning_vel : 0.5
+turn_window_min : 3.5
+turn_window_max : 4.5
+max_x_deviation : 4.25

@@ -11,7 +11,7 @@ import os
 def read_waypoints_from_csv(filename):
     # Import waypoints.csv into a list (path_points)
     if filename == '':
-        raise ValueError('No file path for waypoints file')
+        raise ValueError('No any file path for waypoints file')
     with open(filename) as f:
         path_points = [tuple(line) for line in csv.reader(f)]
     path_points = [(float(point[0]), float(point[1]), float(point[2])) for point in path_points]

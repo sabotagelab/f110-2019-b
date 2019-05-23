@@ -1,0 +1,2 @@
+float32 lookahead_dist
+float32 velocity
