@@ -9,7 +9,6 @@ import tf.transformations as transform
 from pure_pursuit_utils import *
 import copy
 
-
 class PurePursuit:
     def __init__(self):
         rospy.init_node('pure_pursuit_node')
@@ -17,8 +16,8 @@ class PurePursuit:
         self.drive_pub = rospy.Publisher('drive_parameters', drive_param, queue_size=1)
         self.LOOKAHEAD_DISTANCE = 2.0  # meters
         self.VELOCITY = 1.0  # m/s
-        filename = rospy.get_param('~waypoints_filepath', '')
-        self.waypoints = read_waypoints_from_csv(filename)
+        file_path = rospy.get_param('~waypoints_filepath', '')
+        self.waypoints = read_waypoints_from_csv(file_path)
         self.current_pose = [0,0,0]
         self.last_search_index = 0
         print(len(self.waypoints))
