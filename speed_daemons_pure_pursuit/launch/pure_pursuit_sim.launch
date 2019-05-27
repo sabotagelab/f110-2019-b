@@ -5,6 +5,10 @@
   	<include file="$(find racecar_gazebo)/launch/racecar.launch">
 		  <arg name="world_name" value="track_empty"/>
   	</include>
+
+	<node pkg="speed_daemons_pure_pursuit" name="create_waypoints_node" type="create_waypoints.py" output="screen">
+      		<param name="waypoint_filepath" value="$(find speed_daemons_pure_pursuit)/explicit_waypoints/waypoints.csv" />
+ 	</node>
   
   	<!-- Run map server -->
 	<arg name="map_file" default="$(find localization)/maps/levine.yaml"/>

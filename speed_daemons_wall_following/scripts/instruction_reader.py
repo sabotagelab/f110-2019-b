@@ -20,7 +20,6 @@ class ReadInstruction:
         print(self.instructions)
 
     def instruction_recieved(self, data):
-        # print(len(self.instructions))
         if data.data == "turnCompleted" and len(self.instructions) > 1:
             print("instruction executed")
             self.instructions.pop(0)

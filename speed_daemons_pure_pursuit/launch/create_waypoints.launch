@@ -1,0 +1,3 @@
+  <node pkg="speed_daemons_pure_pursuit" name="create_waypoints_node" type="create_waypoints.py" output="screen">
+      <param name="waypoint_filepath" value="$(find speed_daemons_pure_pursuit)/explicit_waypoints/waypoints.csv" />
+  </node>
