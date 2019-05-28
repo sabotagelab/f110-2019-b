@@ -8,4 +8,4 @@ straight_vel : 2.0
 turning_vel : 0.5
 turn_window_min : 3.5
 turn_window_max : 4.5
-max_x_deviation : 4.25
+max_x_deviation : 2.25
