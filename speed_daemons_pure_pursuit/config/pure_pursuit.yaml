@@ -1,0 +1,11 @@
+loop_enable: True
+speed_control: True
+initial_lookahead_distance : 1.5
+initial_velocity : 2.0
+straight_lookahead_dist : 3.0
+turning_lookahead_dist : 0.5
+straight_vel : 2.0
+turning_vel : 0.5
+turn_window_min : 3.5
+turn_window_max : 4.5
+max_x_deviation : 2.25

@@ -1,0 +1,3 @@
+float32 wall_distance
+float32 wall_angle
+string wall_follow_side
