@@ -13,7 +13,7 @@
 
 <!--  	<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 			base_footprint laser" output="screen"/>-->
 	
-	<!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find localization)/rviz_cfg/particle_filter.rviz" output="screen"/>-->
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find localization)/rviz_cfg/particle_filter.rviz" output="screen"/>
 
 <!--	Publish initial pose to /initialpose topic so don't have to manually set in rviz each time  	-->
 	<node pkg="rostopic" type="rostopic" name="rostopic" args="pub initialpose geometry_msgs/PoseWithCovarianceStamped '
@@ -38,8 +38,8 @@
 	
 	<arg name="scan_topic" default="/scan"/>
 	<arg name="odometry_topic" default="/vesc/odom"/>
-	<arg name="angle_step" default="18"/>
-	<arg name="max_particles" default="4000"/>
+	<arg name="angle_step" default="9"/>
+	<arg name="max_particles" default="3000"/>
 	<arg name="squash_factor" default="2.2"/>
 	<arg name="viz" default="1"/>
 
