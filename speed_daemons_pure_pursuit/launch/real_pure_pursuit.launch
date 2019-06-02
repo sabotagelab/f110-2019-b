@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+	<include file="$(find racecar)/launch/teleop.launch"/>
+  	
+  	<!-- Run map server -->
+	<arg name="map_file" default="$(find localization)/maps/levine.yaml"/>
+	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  	<!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 base_footprint laser" output="screen"/>-->
+
+  	
+<!--	Publish initial pose to /initialpose topic so don't have to manually set in rviz each time  	-->
+	
+    <node pkg="speed_daemons_pure_pursuit" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
+    <node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_visualizer" type="visualize.py" output="screen"/>
+	<node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit.py"  output="screen">
+		<param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/dearborn_waypoints.csv"/>
+	</node>
+  	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find speed_daemons_pure_pursuit)/rviz/pure_pursuit_sim.rviz" output="screen"/>
+
+
+</launch>

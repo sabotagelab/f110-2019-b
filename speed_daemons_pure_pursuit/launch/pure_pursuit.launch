@@ -3,12 +3,10 @@
 	<include file="$(find racecar)/launch/teleop.launch"/>
   	
   	<!-- Run map server -->
-	<arg name="map_file" default="$(find localization)/maps/levine.yaml"/>
+	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/complete_dearborn_hall.yaml"/>
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
-  	<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 			base_footprint laser" output="screen"/>
-  	
-  	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find lab_pure_pursuit)/rviz_cfg/particle_filter.rviz" output="screen"/>
+  	<!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 base_footprint laser" output="screen"/>-->
   	
 <!--	Publish initial pose to /initialpose topic so don't have to manually set in rviz each time  	-->
 	<node pkg="rostopic" type="rostopic" name="rostopic" args="pub initialpose geometry_msgs/PoseWithCovarianceStamped '
@@ -49,7 +47,7 @@
 		<param name="squash_factor" value="$(arg squash_factor)"/>
 		<param name="theta_discretization" value="112"/>
 		<!-- max sensor range in meters -->
-		<param name="max_range" value="10"/> 
+		<param name="max_range" value="6"/> 
 		<param name="viz" value="$(arg viz)"/> 
 		<param name="fine_timing" value="0"/> 
 		<param name="publish_odom" value="1"/> 
@@ -66,7 +64,7 @@
 		     true prob. dist, too little and the particle filter can diverge at high speeds where the
 		     ackermann motion model is inaccurate
 		-->
-		<param name="motion_dispersion_x" value="0.05"/> 
+		<param name="motion_dispersion_x" value="0.025"/> 
 		<param name="motion_dispersion_y" value="0.025"/> 
 		<param name="motion_dispersion_theta" value="0.25"/> 
 
@@ -76,10 +74,15 @@
 		-->
 		<param name="rangelib_variant" value="2"/>
 	</node>
-
-    	<node pkg="lab_pure_pursuit" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
-	<node pkg="lab_pure_pursuit" name="dead_mans_switch" type="dead_mans_switch.py" output="screen"/>
-	<node pkg="lab_pure_pursuit" name="pure_pursuit" type="pure_pursuit.py" output="screen"/>
-
+    <arg name="pure_pursuit_config" default="$(find speed_daemons_pure_pursuit)/config/pure_pursuit.yaml" />
+    <rosparam file="$(arg pure_pursuit_config)" command="load"/>
+    <node pkg="speed_daemons_pure_pursuit" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
+    <node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_visualizer" type="visualize.py" output="screen"/>
+	<node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit.py"  output="screen">
+		<param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/dearborn_waypoints.csv"/>
+	</node>
+	<node pkg="speed_daemons_pure_pursuit" name="dead_mans_switch" type="dead_mans_switch.py" output="screen"/>
+    <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find speed_daemons_pure_pursuit)/rviz/pure_pursuit_sim.rviz" output="screen"/>-->
+	
 
 </launch>

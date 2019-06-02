@@ -28,10 +28,10 @@ VescToOdom::VescToOdom(ros::NodeHandle nh, ros::NodeHandle private_nh) :
   if (use_servo_cmd_) {
     if (!getRequiredParam(nh, "steering_angle_to_servo_gain", steering_to_servo_gain_))
       return;
-    // if (!getRequiredParam(nh, "steering_angle_to_servo_offset", steering_to_servo_offset_))
-    //   return;
-    if (!getRequiredParam(nh, "steering_angle_offset_for_odom", steering_to_servo_offset_))
-      return;
+     if (!getRequiredParam(nh, "steering_angle_to_servo_offset", steering_to_servo_offset_))
+       return;
+    //if (!getRequiredParam(nh, "steering_angle_offset_for_odom", steering_to_servo_offset_))
+     // return;
     if (!getRequiredParam(nh, "wheelbase", wheelbase_))
       return;
   }
