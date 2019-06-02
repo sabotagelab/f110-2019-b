@@ -19,6 +19,7 @@ class PurePursuit:
         self.parameters_pub = rospy.Publisher('pure_pursuit_parameters', pure_pursuit_param, queue_size=1)
         self.current_pose = [0, 0, 0]
         self.last_search_index = 0
+        self.FIND_NEAREST_POINT= True
 
         filename = rospy.get_param('~waypoints_filepath', '')
         self.waypoints = read_waypoints_from_csv(filename)
@@ -36,6 +37,16 @@ class PurePursuit:
         self.MAX_X_DEVIATION = rospy.get_param('max_x_deviation',4.75)
         self.NEAR_END_OF_WAY_POINTS=False
 
+    def find_closed_point_index(self,current_pos):
+        nearest_index = 0
+        nearest_dist = float('inf')
+        for index, point in enumerate(self.waypoints):
+            distance = dist(current_pos, point)
+            if distance <= nearest_dist:
+                nearest_dist = distance
+                nearest_index = index
+        return nearest_index
+
     # Input data is PoseStamped message from topic /pf/viz/inferred_pose.
     # Runs pure pursuit and publishes velocity and steering angle.
     def pf_pose_callback(self, msg):
@@ -47,6 +58,10 @@ class PurePursuit:
         self.current_pose = [pose_x, pose_y, pose_yaw]
         # print "pose:=", pose_x, pose_y, pose_yaw
 
+        if self.FIND_NEAREST_POINT:
+            self.last_search_index=self.find_closed_point_index(self.current_pose)
+            print "Nearest index=",self.last_search_index
+            self.FIND_NEAREST_POINT=False
         if self.LOOP_ENABLE and self.NEAR_END_OF_WAY_POINTS:
             self.last_search_index = 0
             self.NEAR_END_OF_WAY_POINTS = False
@@ -117,7 +132,8 @@ class PurePursuit:
         if window_points_count == 0:
             return 0.0
         average_x_from_car = average_x_from_car/window_points_count
-        return abs(average_x_from_car)
+        average_x_from_car=np.clip(abs(average_x_from_car), 0.0, self.MAX_X_DEVIATION)
+        return average_x_from_car
 
     def compute_x_wrt_car(self,deltax,deltay,yaw,distance):
         beta = math.atan2(deltax,deltay)
