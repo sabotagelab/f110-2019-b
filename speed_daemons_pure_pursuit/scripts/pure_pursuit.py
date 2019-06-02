@@ -3,6 +3,7 @@
 import rospy
 from race.msg import drive_param
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import Bool
 import math
 import numpy as np
 import tf.transformations as transform
@@ -15,6 +16,7 @@ class PurePursuit:
     def __init__(self):
         rospy.init_node('pure_pursuit_node')
         rospy.Subscriber('/pf/viz/inferred_pose', PoseStamped, self.pf_pose_callback, queue_size=1)
+        rospy.Subscriber('pure_pursuit_reset', Bool, self.joy_reset_callback, queue_size=1)
         self.drive_pub = rospy.Publisher('drive_parameters', drive_param, queue_size=1)
         self.parameters_pub = rospy.Publisher('pure_pursuit_parameters', pure_pursuit_param, queue_size=1)
         self.current_pose = [0, 0, 0]
@@ -46,6 +48,10 @@ class PurePursuit:
                 nearest_dist = distance
                 nearest_index = index
         return nearest_index
+
+    def joy_reset_callback(self,msg):
+        if msg.data:
+            self.FIND_NEAREST_POINT=True
 
     # Input data is PoseStamped message from topic /pf/viz/inferred_pose.
     # Runs pure pursuit and publishes velocity and steering angle.

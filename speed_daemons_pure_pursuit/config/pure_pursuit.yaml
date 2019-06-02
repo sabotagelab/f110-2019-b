@@ -6,12 +6,7 @@ straight_lookahead_dist : 3.0
 turning_lookahead_dist : 0.6
 straight_vel : 1.6
 turning_vel : 0.5
-<<<<<<< Updated upstream
-turn_window_min : 3.5
-turn_window_max : 4.5
-max_x_deviation : 2.25
-=======
 turn_window_min : 3.0
 turn_window_max : 3.5
 max_x_deviation : 3.0
->>>>>>> Stashed changes
+
