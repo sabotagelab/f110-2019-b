@@ -167,5 +167,6 @@ class PurePursuit:
 
 if __name__ == '__main__':
     pure_pursuit = PurePursuit()
+    input('str')
     pure_pursuit.run_pure_pursuit()
     rospy.spin()
