@@ -3,7 +3,7 @@
 	<include file="$(find racecar)/launch/teleop.launch"/>
   	
   	<!-- Run map server -->
-	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/complete_dearborn_hall.yaml"/>
+	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/kelley.yaml"/>
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   	<!--<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 base_footprint laser" output="screen"/>-->
@@ -79,10 +79,10 @@
     <node pkg="speed_daemons_pure_pursuit" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
     <node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_visualizer" type="visualize.py" output="screen"/>
 	<node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit.py"  output="screen">
-		<param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/dearborn_waypoints.csv"/>
+		<param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/kelley_waypoints.csv"/>
 	</node>
 	<node pkg="speed_daemons_pure_pursuit" name="dead_mans_switch" type="dead_mans_switch.py" output="screen"/>
-    <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find speed_daemons_pure_pursuit)/rviz/pure_pursuit_sim.rviz" output="screen"/>-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find speed_daemons_pure_pursuit)/rviz/pure_pursuit_sim.rviz" output="screen"/>
 	
 
 </launch>
