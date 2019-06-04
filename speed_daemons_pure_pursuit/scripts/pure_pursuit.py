@@ -71,6 +71,7 @@ class PurePursuit:
         self.current_pose = [pose_x, pose_y, pose_yaw]
         if not self.pose_read_flag:
             self.pose_read_flag = True
+        self.do_pure_pursuit()
 
     def do_pure_pursuit(self):
         # print "pose:=", pose_x, pose_y, pose_yaw
@@ -180,11 +181,11 @@ class PurePursuit:
     def run_pure_pursuit(self):
         rate = rospy.Rate(self.RATE)
         while not rospy.is_shutdown():
-            self.do_pure_pursuit()
+            # self.do_pure_pursuit()
             rate.sleep()
 
 
 if __name__ == '__main__':
     pure_pursuit = PurePursuit()
-    pure_pursuit.run_pure_pursuit()
+    # pure_pursuit.run_pure_pursuit()
     rospy.spin()
