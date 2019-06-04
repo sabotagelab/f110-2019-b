@@ -54,6 +54,8 @@ class PurePursuit:
             if distance <= nearest_dist:
                 nearest_dist = distance
                 nearest_index = index
+        if nearest_index>345:
+            return 0
         return nearest_index
 
     def joy_reset_callback(self, msg):
@@ -94,8 +96,18 @@ class PurePursuit:
                     self.LOOKAHEAD_DISTANCE = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
                                                         [self.STRAIGHT_LOOKAHEAD_DIST, self.TURNING_LOOKAHEAD_DIST])
 
-                self.VELOCITY = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
-                                          [self.STRAIGHT_VEL, self.TURNING_VEL])
+                
+                # if 110<self.last_search_index<315:
+                #     self.STRAIGHT_VEL=3.61
+                #     self.STRAIGHT_LOOKAHEAD_DIST=3.0
+                # else:
+                #     self.STRAIGHT_VEL=3.28
+                #     self.STRAIGHT_LOOKAHEAD_DIST=2.5
+                    
+                self.VELOCITY = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],[self.STRAIGHT_VEL, self.TURNING_VEL])
+
+
+
 
 
             pursuit_param = pure_pursuit_param()

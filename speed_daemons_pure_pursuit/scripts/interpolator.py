@@ -8,7 +8,7 @@
 7.65,6.19,0.0
 '''
 
-STEP = 0.1
+STEP = 0.015
 def do_linear_interpolation(x_start,y_start,xgoal,ygoal):
     steps_count=abs(xgoal-x_start)/STEP
     delta_x= (xgoal-x_start)/steps_count
@@ -19,8 +19,4 @@ def do_linear_interpolation(x_start,y_start,xgoal,ygoal):
         print x_start,',',y_start,',',0.0
 
 
-do_linear_interpolation(2.54,2.41,3.95,3.11)
-do_linear_interpolation(3.95,3.11,5.14,3.63)
-do_linear_interpolation(5.14,3.63,6.21,4.30)
-do_linear_interpolation(6.21,4.30,7.28,5.08)
-do_linear_interpolation(7.28,5.08,7.65,6.19)
+do_linear_interpolation(-24.699,-46.7234,-24.19,-42.92745)

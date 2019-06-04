@@ -3,15 +3,15 @@ speed_control: True
 pure_pursuit_rate: 20
 initial_lookahead_distance : 0.5
 initial_velocity : 1.0
-straight_lookahead_dist : 2.6
+straight_lookahead_dist : 2.5
 turning_lookahead_dist : 1.9
 interpolation_mode : quadratic'
 kp_quad : 0.3
-quad_factor : 1.65
-straight_vel : 5.75
-turning_vel : 0.9
-turn_window_min : 0.75
-turn_window_max : 1.15
-max_x_deviation : 6.0
+quad_factor : 1.75
+straight_vel : 3.30
+turning_vel : 0.5
+turn_window_min : 0.9
+turn_window_max : 1.4
+max_x_deviation : 6.5
 
 
