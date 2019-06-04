@@ -34,6 +34,10 @@ class PurePursuit:
         self.TURN_WINDOW_MAX = rospy.get_param('turn_window_max', 4.5)
         self.MAX_X_DEVIATION = rospy.get_param('max_x_deviation', 4.75)
         self.RATE = rospy.get_param('pure_pursuit_rate', 20)
+        self.INTERPOLATION_MODE = rospy.get_param('interpolation_mode', 'linear')
+        print(self.INTERPOLATION_MODE)
+        self.kp_quad = rospy.get_param('kp_quad', 0.75)
+        self.quad_factor = rospy.get_param('quad_factor', 2.5)
         self.NEAR_END_OF_WAY_POINTS = False
         self.pose_read_flag = False
         rospy.Subscriber('/pf/viz/inferred_pose', PoseStamped, self.pf_pose_callback, queue_size=1)
@@ -83,10 +87,15 @@ class PurePursuit:
             if self.SPEED_CONTROL:
                 average_x_from_car = self.get_x_deviation_in_path(self.current_pose[0], self.current_pose[1],
                                                                   self.current_pose[2])
+                if self.INTERPOLATION_MODE == 'quadratic':
+                    self.LOOKAHEAD_DISTANCE = self.do_quadratic_interpolation(average_x_from_car)
+                else:
+                    self.LOOKAHEAD_DISTANCE = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
+                                                        [self.STRAIGHT_LOOKAHEAD_DIST, self.TURNING_LOOKAHEAD_DIST])
+
                 self.VELOCITY = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
                                           [self.STRAIGHT_VEL, self.TURNING_VEL])
-                self.LOOKAHEAD_DISTANCE = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
-                                                    [self.STRAIGHT_LOOKAHEAD_DIST, self.TURNING_LOOKAHEAD_DIST])
+
 
             pursuit_param = pure_pursuit_param()
             pursuit_param.lookahead_dist = self.LOOKAHEAD_DISTANCE
@@ -164,10 +173,8 @@ class PurePursuit:
         return x_wrt_car
 
     def do_quadratic_interpolation(self,error):
-        kp=0.25
-        pow_factor= 1.5
-        lookahead_response = self.STRAIGHT_LOOKAHEAD_DIST - kp * pow(error,pow_factor)
-        np.clip(lookahead_response,self.TURNING_LOOKAHEAD_DIST,self.STRAIGHT_LOOKAHEAD_DIST)
+        lookahead_response = self.STRAIGHT_LOOKAHEAD_DIST - self.kp_quad * pow(error,self.quad_factor)
+        lookahead_response=np.clip(lookahead_response,self.TURNING_LOOKAHEAD_DIST,self.STRAIGHT_LOOKAHEAD_DIST)
         return lookahead_response
 
     def run_pure_pursuit(self):
