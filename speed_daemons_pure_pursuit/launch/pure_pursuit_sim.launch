@@ -11,21 +11,9 @@
  	</node> -->
   
   	<!-- Run map server -->
-	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/complete_dearborn_hall.yaml"/>
+	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/kelley.yaml"/>
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
-        <arg name="pure_pursuit_config" default="$(find speed_daemons_pure_pursuit)/config/pure_pursuit.yaml" />
-        <rosparam file="$(arg pure_pursuit_config)" command="load"/>
-  
-
-	<node pkg="speed_daemons_pure_pursuit" name="remap_gazebo_pose_node" type="remap_gazebo_pose.py" output="screen" />
-  	<!-- <node pkg="lab_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit_speed_control.py" output="screen"/>  -->
-  	<node pkg="speed_daemons_pure_pursuit" name="sim_connector_node" type="sim_connector.py" output="screen"/>
-  	<node pkg="speed_daemons_pure_pursuit" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
-        <node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_visualizer" type="visualize.py" output="screen"/>
-	<node pkg="speed_daemons_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit.py"  output="screen">
-		<param name="waypoints_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/dearborn_waypoints.csv"/>
-	</node>
   	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find speed_daemons_pure_pursuit)/rviz/pure_pursuit_sim.rviz" output="screen"/>
 
 </launch>

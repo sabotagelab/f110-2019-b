@@ -8,11 +8,14 @@ import os
 import time
 from race.msg import drive_param
 from ackermann_msgs.msg import AckermannDriveStamped, AckermannDrive
-from std_msgs.msg import Header
+from std_msgs.msg import Header,Bool
+
 
 pub = rospy.Publisher("vesc/high_level/ackermann_cmd_mux/input/nav_0",
                               AckermannDriveStamped,
                               queue_size = 10)
+reset_pub= rospy.Publisher("pure_pursuit_reset",Bool,queue_size=1)
+
 
 JOY_TIMER_PERIOD = 100000000   # 100 million nanoseconds -> 0.1 seconds
 JOY_INIT_DELAY = 2             # 5 seconds
@@ -41,9 +44,12 @@ def timer_callback(event):
     # The joystick was reconnected: delay for JOY_INIT_DELAY seconds to give ROS time
     # to re-initialize it. Otherwise, the car might go on its own without us holding the right bumper.
     if new_joystick_present and not joystick_present:
+        reset_pub.publish(Bool(True))
         time.sleep(JOY_INIT_DELAY)
 
     joystick_present = new_joystick_present
+    
+    
     joy_timer = rospy.timer.Timer(rospy.Duration(0, JOY_TIMER_PERIOD), timer_callback, oneshot=True)
 
 # Need to initialize joy_timer twice: once at startup (here), and another time in the callback.
@@ -58,6 +64,7 @@ def callback(data):
     # Set velocity and angle to 0.0 unless the joystick is present.
     velocity = 0.0
     angle = 0.0
+    
     if joystick_present:
         velocity = data.velocity
         angle = data.angle

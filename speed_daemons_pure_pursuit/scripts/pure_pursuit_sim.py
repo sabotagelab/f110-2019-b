@@ -54,8 +54,6 @@ class PurePursuit:
             if distance <= nearest_dist:
                 nearest_dist = distance
                 nearest_index = index
-        if nearest_index>345:
-            return 0
         return nearest_index
 
     def joy_reset_callback(self, msg):
@@ -73,7 +71,6 @@ class PurePursuit:
         self.current_pose = [pose_x, pose_y, pose_yaw]
         if not self.pose_read_flag:
             self.pose_read_flag = True
-        self.do_pure_pursuit()
 
     def do_pure_pursuit(self):
         # print "pose:=", pose_x, pose_y, pose_yaw
@@ -96,18 +93,8 @@ class PurePursuit:
                     self.LOOKAHEAD_DISTANCE = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
                                                         [self.STRAIGHT_LOOKAHEAD_DIST, self.TURNING_LOOKAHEAD_DIST])
 
-                
-                # if 110<self.last_search_index<315:
-                #     self.STRAIGHT_VEL=3.61
-                #     self.STRAIGHT_LOOKAHEAD_DIST=3.0
-                # else:
-                #     self.STRAIGHT_VEL=3.28
-                #     self.STRAIGHT_LOOKAHEAD_DIST=2.5
-                    
-                self.VELOCITY = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],[self.STRAIGHT_VEL, self.TURNING_VEL])
-
-
-
+                self.VELOCITY = np.interp(average_x_from_car, [0.0, self.MAX_X_DEVIATION],
+                                          [self.STRAIGHT_VEL, self.TURNING_VEL])
 
 
             pursuit_param = pure_pursuit_param()
@@ -193,11 +180,12 @@ class PurePursuit:
     def run_pure_pursuit(self):
         rate = rospy.Rate(self.RATE)
         while not rospy.is_shutdown():
-            # self.do_pure_pursuit()
+            self.do_pure_pursuit()
             rate.sleep()
 
 
 if __name__ == '__main__':
     pure_pursuit = PurePursuit()
-    # pure_pursuit.run_pure_pursuit()
+    input('str')
+    pure_pursuit.run_pure_pursuit()
     rospy.spin()

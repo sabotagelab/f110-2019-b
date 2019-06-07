@@ -8,7 +8,7 @@
   <include file="$(find racecar)/launch/teleop.launch"/>
 
   <!-- Run map server -->
-	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/complete_dearborn_hall.yaml"/>
+	<arg name="map_file" default="$(find speed_daemons_pure_pursuit)/maps/kelley.yaml"/>
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
 <!--  	<node pkg="tf2_ros" type="static_transform_publisher" name="base_footprint_to_laser" args="0 0 0 0 0 0 			base_footprint laser" output="screen"/>-->
@@ -38,14 +38,11 @@
 	
 	<arg name="scan_topic" default="/scan"/>
 	<arg name="odometry_topic" default="/vesc/odom"/>
-	<arg name="angle_step" default="18"/>
+	<arg name="angle_step" default="9"/>
 	<arg name="max_particles" default="4000"/>
 	<arg name="squash_factor" default="2.2"/>
 	<arg name="viz" default="1"/>
-	
-	<node pkg="speed_daemons_pure_pursuit" name="create_waypoints_node" type="create_waypoints.py" output="screen">
-		<param name="waypoint_filepath" value="$(find speed_daemons_pure_pursuit)/waypoints/waypoints.csv" />
- 	</node>
+
 
 	<node pkg="particle_filter" type="particle_filter.py" name="Particle_filter" output="screen">
 		<param name="scan_topic" value="$(arg scan_topic)"/>
@@ -60,7 +57,7 @@
 		<param name="squash_factor" value="$(arg squash_factor)"/>
 		<param name="theta_discretization" value="112"/>
 		<!-- max sensor range in meters -->
-		<param name="max_range" value="10"/> 
+		<param name="max_range" value="6"/> 
 		<param name="viz" value="$(arg viz)"/> 
 		<param name="fine_timing" value="0"/> 
 		<param name="publish_odom" value="1"/> 
